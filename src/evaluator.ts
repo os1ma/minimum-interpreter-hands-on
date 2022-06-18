@@ -1,9 +1,11 @@
-export function evaluate(tokens: string[]): any {
-  let result = parseInt(tokens[0])
+import { Token } from './token'
+
+export function evaluate(tokens: Token[]): any {
+  let result = parseInt(tokens[0].value)
 
   for (let i = 1; i < tokens.length; i = i + 2) {
-    const operator = tokens[i]
-    const rightValue = parseInt(tokens[i + 1])
+    const operator = tokens[i].value
+    const rightValue = parseInt(tokens[i + 1].value)
 
     switch (operator) {
       case '+':

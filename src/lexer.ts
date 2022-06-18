@@ -1,3 +1,5 @@
+import { Token } from './token'
+
 export class Lexer {
   private currentIndex = -0
 
@@ -8,10 +10,10 @@ export class Lexer {
     return this.currentIndex < this.input.length
   }
 
-  nextToken() {
+  nextToken(): Token {
     this.skipSpacesAndComments()
 
-    let token
+    let tokenValue
     if (isDigit(this.currentChar())) {
       const startIndex = this.currentIndex
       let endIndex = this.currentIndex
@@ -20,16 +22,16 @@ export class Lexer {
         endIndex = this.currentIndex + 1
         this.currentIndex++
       }
-      token = this.input.slice(startIndex, endIndex + 1)
+      tokenValue = this.input.slice(startIndex, endIndex + 1)
     } else {
-      token = this.currentChar()
+      tokenValue = this.currentChar()
     }
 
     this.currentIndex++
-    return token
+    return new Token(tokenValue)
   }
 
-  tokenizeAll(): string[] {
+  tokenizeAll(): Token[] {
     const tokens = []
     while (this.hasNextToken()) {
       tokens.push(this.nextToken())
