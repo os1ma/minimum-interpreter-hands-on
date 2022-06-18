@@ -13,7 +13,6 @@ export class Lexer {
   nextToken(): Token {
     this.skipSpacesAndComments()
 
-    let tokenValue
     if (isDigit(this.currentChar())) {
       const startIndex = this.currentIndex
       let endIndex = this.currentIndex
@@ -22,13 +21,14 @@ export class Lexer {
         endIndex = this.currentIndex + 1
         this.currentIndex++
       }
-      tokenValue = this.input.slice(startIndex, endIndex + 1)
+      const tokenValue = this.input.slice(startIndex, endIndex + 1)
+      this.currentIndex++
+      return new Token(tokenValue, 'INTEGER')
     } else {
-      tokenValue = this.currentChar()
+      const tokenValue = this.currentChar()
+      this.currentIndex++
+      return new Token(tokenValue, 'OPERATOR')
     }
-
-    this.currentIndex++
-    return new Token(tokenValue)
   }
 
   tokenizeAll(): Token[] {
