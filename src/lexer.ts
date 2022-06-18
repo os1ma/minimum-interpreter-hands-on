@@ -18,6 +18,23 @@ export class Lexer {
       currentChar = this.input[this.currentIndex]
     }
 
-    return currentChar
+    if (isDigit(currentChar)) {
+      const startIndex = this.currentIndex
+      let endIndex = this.currentIndex
+
+      let nextChar = this.input[this.currentIndex + 1]
+      while (isDigit(nextChar)) {
+        endIndex = this.currentIndex + 1
+        this.currentIndex++
+        nextChar = this.input[this.currentIndex + 1]
+      }
+      return this.input.slice(startIndex, endIndex + 1)
+    } else {
+      return currentChar
+    }
   }
+}
+
+function isDigit(char: string): boolean {
+  return '0' <= char && char <= '9'
 }
