@@ -1,4 +1,5 @@
 import readline from 'readline'
+import { Lexer } from './lexer'
 
 function showPrompt() {
   process.stdout.write('> ')
@@ -11,7 +12,8 @@ function main() {
 
   showPrompt()
   reader.on('line', (line) => {
-    console.log(line)
+    const lexer = new Lexer(line)
+    console.log(lexer)
     showPrompt()
   })
 }
