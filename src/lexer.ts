@@ -4,12 +4,12 @@ export class Lexer {
   constructor(private input: string) {}
 
   hasNextToken(): boolean {
-    this.skipSpaces()
+    this.skipSpacesAndComments()
     return this.currentIndex < this.input.length
   }
 
   nextToken() {
-    this.skipSpaces()
+    this.skipSpacesAndComments()
 
     let token
     if (isDigit(this.currentChar())) {
@@ -45,10 +45,57 @@ export class Lexer {
     return this.input[this.currentIndex + 1]
   }
 
+  private skipSpacesAndComments() {
+    while (this.shouldSkip()) {
+      switch (this.currentChar()) {
+        case ' ':
+          this.skipSpaces()
+          break
+        case '/':
+          this.skipComment()
+          break
+      }
+    }
+  }
+
+  shouldSkip() {
+    const char = this.currentChar()
+    const next = this.nextChar()
+    return (
+      char === ' ' ||
+      (char === '/' && next === '/') ||
+      (char === '/' && next === '*')
+    )
+  }
+
   private skipSpaces() {
     while (this.currentChar() === ' ') {
       this.currentIndex++
     }
+  }
+
+  private skipComment() {
+    switch (this.nextChar()) {
+      // skip one line comment
+      case '/':
+        this.currentIndex = this.input.length
+        break
+      // skip multiple line comment
+      case '*':
+        // /* の終了までスキップ
+        this.currentIndex++
+        // コメントの内部をスキップ
+        while (!this.endOfMultipleLineComment()) {
+          this.currentIndex++
+        }
+        // */ をスキップ
+        this.currentIndex += 2
+        break
+    }
+  }
+
+  private endOfMultipleLineComment() {
+    return this.currentChar() === '*' && this.nextChar() === '/'
   }
 }
 

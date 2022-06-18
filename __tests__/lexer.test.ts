@@ -2,7 +2,7 @@ import { Lexer } from '../src/lexer'
 
 describe('Lexer', () => {
   it('tokenize 1 +  2 ', () => {
-    const input = '1 +  2 '
+    const input = '1 +  2 // + 3'
     const lexer = new Lexer(input)
 
     expect(lexer.hasNextToken()).toEqual(true)
@@ -15,7 +15,7 @@ describe('Lexer', () => {
   })
 
   it('tokenize 3/2', () => {
-    const input = '3/2'
+    const input = '3/2/*+5*/'
     const lexer = new Lexer(input)
 
     expect(lexer.hasNextToken()).toEqual(true)
@@ -27,8 +27,8 @@ describe('Lexer', () => {
     expect(lexer.hasNextToken()).toEqual(false)
   })
 
-  it('tokenize 10 + 2 * 2', () => {
-    const input = '10 + 2 * 2'
+  it('tokenize 10 + 2 * 3', () => {
+    const input = '10 + 2*/* hogehoge */3'
     const lexer = new Lexer(input)
 
     expect(lexer.hasNextToken()).toEqual(true)
@@ -40,7 +40,7 @@ describe('Lexer', () => {
     expect(lexer.hasNextToken()).toEqual(true)
     expect(lexer.nextToken()).toEqual('*')
     expect(lexer.hasNextToken()).toEqual(true)
-    expect(lexer.nextToken()).toEqual('2')
+    expect(lexer.nextToken()).toEqual('3')
     expect(lexer.hasNextToken()).toEqual(false)
   })
 })
