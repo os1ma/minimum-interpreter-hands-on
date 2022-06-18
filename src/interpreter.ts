@@ -1,4 +1,5 @@
 import readline from 'readline'
+import { evaluate } from './evaluator'
 import { Lexer } from './lexer'
 
 function showPrompt() {
@@ -13,7 +14,14 @@ function main() {
   showPrompt()
   reader.on('line', (line) => {
     const lexer = new Lexer(line)
-    console.log(lexer)
+    const tokens = []
+    while (lexer.hasNextToken()) {
+      tokens.push(lexer.nextToken())
+    }
+
+    const result = evaluate(tokens)
+    console.log(result)
+
     showPrompt()
   })
 }
