@@ -1,4 +1,17 @@
 {
   "name": "minimum-interpreter-hands-on",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "ts-node src/interpreter.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.2",
+    "jest": "^28.1.1",
+    "ts-jest": "^28.0.5"
+  }
 }
