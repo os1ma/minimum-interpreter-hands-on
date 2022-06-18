@@ -10,13 +10,9 @@ export class Lexer {
   nextToken() {
     this.currentIndex++
 
-    let currentChar = this.input[this.currentIndex]
+    this.skipSpaces()
 
-    // Skip spaces
-    while (currentChar === ' ') {
-      this.currentIndex++
-      currentChar = this.input[this.currentIndex]
-    }
+    const currentChar = this.input[this.currentIndex]
 
     if (isDigit(currentChar)) {
       const startIndex = this.currentIndex
@@ -31,6 +27,14 @@ export class Lexer {
       return this.input.slice(startIndex, endIndex + 1)
     } else {
       return currentChar
+    }
+  }
+
+  private skipSpaces() {
+    let currentChar = this.input[this.currentIndex]
+    while (currentChar === ' ') {
+      this.currentIndex++
+      currentChar = this.input[this.currentIndex]
     }
   }
 }
