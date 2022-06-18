@@ -1,30 +1,53 @@
-import { Token } from './token'
+import { AST, Expression, Factor, Term } from './ast'
 
-export function evaluate(tokens: Token[]): any {
-  let result = parseInt(tokens[0].value)
+export function evaluate(ast: AST): any {
+  return evaluateExpression(ast)
+}
 
-  for (let i = 1; i < tokens.length; i = i + 2) {
-    const operator = tokens[i].value
-    const rightValue = parseInt(tokens[i + 1].value)
+function evaluateExpression(expression: Expression): number {
+  let result = evaluateTerm(expression.left)
 
-    switch (operator) {
+  expression.operations.forEach((op) => {
+    const value = evaluateTerm(op.term)
+    switch (op.operator.value) {
       case '+':
-        result += rightValue
+        result += value
         break
       case '-':
-        result -= rightValue
-        break
-      case '*':
-        result *= rightValue
-        break
-      case '/':
-        result /= rightValue
-        result = Math.floor(result)
+        result += value
         break
       default:
-        throw new Error(`Unsupported operator '${operator}'.`)
+        throw new Error(`Invalid operation '${op.operator.value}'.`)
     }
-  }
+  })
 
   return result
+}
+
+function evaluateTerm(term: Term): number {
+  let result = evaluateFactor(term.left)
+
+  term.operations.forEach((op) => {
+    const value = evaluateFactor(op.factor)
+    switch (op.operator.value) {
+      case '*':
+        result *= value
+        break
+      case '/':
+        result = Math.floor(result / value)
+        break
+      default:
+        throw new Error(`Invalid operation '${op.operator.value}'.`)
+    }
+  })
+
+  return result
+}
+
+function evaluateFactor(factor: Factor): number {
+  if (factor.isNumber()) {
+    return parseInt(factor.number!.value)
+  } else {
+    return evaluateExpression(factor.expression!)
+  }
 }

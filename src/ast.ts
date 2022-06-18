@@ -67,6 +67,10 @@ export class Factor {
     private _expression: Expression | null
   ) {}
 
+  isNumber() {
+    return this._number !== null
+  }
+
   get number() {
     return this._number
   }

@@ -1,11 +1,16 @@
 import { evaluate } from '../src/evaluator'
 import { Lexer } from '../src/lexer'
+import { Parser } from '../src/parser'
 
 describe('evaluate', () => {
   function evaluateInput(input: string) {
     const lexer = new Lexer(input)
     const tokens = lexer.tokenizeAll()
-    return evaluate(tokens)
+
+    const parser = new Parser(tokens)
+    const ast = parser.parse()
+
+    return evaluate(ast)
   }
 
   it('1 + 2', () => {
@@ -23,6 +28,6 @@ describe('evaluate', () => {
   it('10 + 2 * 2', () => {
     const input = '10 + 2 * 2'
     const result = evaluateInput(input)
-    expect(result).toEqual(24)
+    expect(result).toEqual(14)
   })
 })
