@@ -83,7 +83,7 @@ export class Lexer {
       // skip multiple line comment
       case '*':
         // /* の終了までスキップ
-        this.currentIndex++
+        this.currentIndex += 2
         // コメントの内部をスキップ
         while (!this.endOfMultipleLineComment()) {
           this.currentIndex++

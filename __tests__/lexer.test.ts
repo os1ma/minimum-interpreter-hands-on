@@ -28,7 +28,7 @@ describe('Lexer', () => {
   })
 
   it('tokenize 10 + 2 * 3', () => {
-    const input = '10 + 2*/* hogehoge */3'
+    const input = '10 + 2*/* hogehoge */3/*/+2*/'
     const lexer = new Lexer(input)
 
     expect(lexer.hasNextToken()).toEqual(true)
