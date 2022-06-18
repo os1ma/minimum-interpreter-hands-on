@@ -29,6 +29,14 @@ export class Lexer {
     return token
   }
 
+  tokenizeAll(): string[] {
+    const tokens = []
+    while (this.hasNextToken()) {
+      tokens.push(this.nextToken())
+    }
+    return tokens
+  }
+
   private currentChar() {
     return this.input[this.currentIndex]
   }

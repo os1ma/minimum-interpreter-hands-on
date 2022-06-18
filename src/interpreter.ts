@@ -14,11 +14,7 @@ function main() {
   showPrompt()
   reader.on('line', (line) => {
     const lexer = new Lexer(line)
-    const tokens = []
-    while (lexer.hasNextToken()) {
-      tokens.push(lexer.nextToken())
-    }
-
+    const tokens = lexer.tokenizeAll()
     const result = evaluate(tokens)
     console.log(result)
 
