@@ -4,6 +4,7 @@ export class Lexer {
   constructor(private input: string) {}
 
   hasNextToken(): boolean {
+    this.skipSpaces()
     return this.currentIndex < this.input.length - 1
   }
 
@@ -12,29 +13,31 @@ export class Lexer {
 
     this.skipSpaces()
 
-    const currentChar = this.input[this.currentIndex]
-
-    if (isDigit(currentChar)) {
+    if (isDigit(this.currentChar())) {
       const startIndex = this.currentIndex
       let endIndex = this.currentIndex
 
-      let nextChar = this.input[this.currentIndex + 1]
-      while (isDigit(nextChar)) {
+      while (isDigit(this.nextChar())) {
         endIndex = this.currentIndex + 1
         this.currentIndex++
-        nextChar = this.input[this.currentIndex + 1]
       }
       return this.input.slice(startIndex, endIndex + 1)
     } else {
-      return currentChar
+      return this.currentChar()
     }
   }
 
+  private currentChar() {
+    return this.input[this.currentIndex]
+  }
+
+  private nextChar() {
+    return this.input[this.currentIndex + 1]
+  }
+
   private skipSpaces() {
-    let currentChar = this.input[this.currentIndex]
-    while (currentChar === ' ') {
+    while (this.currentChar() === ' ') {
       this.currentIndex++
-      currentChar = this.input[this.currentIndex]
     }
   }
 }
