@@ -1,8 +1,8 @@
 import { Lexer } from '../src/lexer'
 
 describe('Lexer', () => {
-  it('tokenize 1 +  2', () => {
-    const input = '1 +  2'
+  it('tokenize 1 +  2 ', () => {
+    const input = '1 +  2 '
     const lexer = new Lexer(input)
 
     expect(lexer.hasNextToken()).toEqual(true)

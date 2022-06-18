@@ -1,18 +1,17 @@
 export class Lexer {
-  private currentIndex = -1
+  private currentIndex = -0
 
   constructor(private input: string) {}
 
   hasNextToken(): boolean {
     this.skipSpaces()
-    return this.currentIndex < this.input.length - 1
+    return this.currentIndex < this.input.length
   }
 
   nextToken() {
-    this.currentIndex++
-
     this.skipSpaces()
 
+    let token
     if (isDigit(this.currentChar())) {
       const startIndex = this.currentIndex
       let endIndex = this.currentIndex
@@ -21,10 +20,13 @@ export class Lexer {
         endIndex = this.currentIndex + 1
         this.currentIndex++
       }
-      return this.input.slice(startIndex, endIndex + 1)
+      token = this.input.slice(startIndex, endIndex + 1)
     } else {
-      return this.currentChar()
+      token = this.currentChar()
     }
+
+    this.currentIndex++
+    return token
   }
 
   private currentChar() {
