@@ -8,6 +8,8 @@ function showPrompt() {
 }
 
 function main() {
+  const debugMode = process.argv[2] === '--debug'
+
   const reader = readline.createInterface({
     input: process.stdin
   })
@@ -19,6 +21,9 @@ function main() {
 
     const parser = new Parser(tokens)
     const ast = parser.parse()
+    if (debugMode) {
+      console.log(ast.toString())
+    }
 
     const result = evaluate(ast)
     console.log(result)
