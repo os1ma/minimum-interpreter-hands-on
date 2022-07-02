@@ -1,4 +1,4 @@
-import { Token } from './token'
+import { keywords, symbols, Token } from './token'
 
 export class Lexer {
   private currentIndex = -0
@@ -24,10 +24,25 @@ export class Lexer {
       const tokenValue = this.input.slice(startIndex, endIndex + 1)
       this.currentIndex++
       return new Token(tokenValue, 'INTEGER')
-    } else {
+    } else if (isSymbol(this.currentChar())) {
       const tokenValue = this.currentChar()
       this.currentIndex++
-      return new Token(tokenValue, 'OPERATOR')
+      return new Token(tokenValue, 'SYMBOL')
+    } else if (isAlphabet(this.currentChar())) {
+      const startIndex = this.currentIndex
+      let endIndex = this.currentIndex
+
+      while (isAlphabet(this.nextChar())) {
+        endIndex = this.currentIndex + 1
+        this.currentIndex++
+      }
+      const tokenValue = this.input.slice(startIndex, endIndex + 1)
+      this.currentIndex++
+
+      const tokeyType = isKeyword(tokenValue) ? 'KEYWORD' : 'IDENTIFIER'
+      return new Token(tokenValue, tokeyType)
+    } else {
+      throw new Error('Unsupported token.')
     }
   }
 
@@ -103,4 +118,16 @@ export class Lexer {
 
 function isDigit(char: string): boolean {
   return '0' <= char && char <= '9'
+}
+
+function isSymbol(char: string): boolean {
+  return symbols.some((s) => s === char)
+}
+
+function isAlphabet(char: string): boolean {
+  return ('a' <= char && char <= 'z') || ('A' <= char && char <= 'Z')
+}
+
+function isKeyword(str: string): boolean {
+  return keywords.some((k) => k === str)
 }
