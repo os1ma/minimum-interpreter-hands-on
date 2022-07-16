@@ -1,4 +1,4 @@
-import { AST, Expression, Factor, Term } from './ast'
+import { AST, Expression, Factor, LetStatement, Term } from './ast'
 import { Token } from './token'
 
 export class Parser {
@@ -7,10 +7,16 @@ export class Parser {
   constructor(private tokens: Token[]) {}
 
   parse(): AST {
-    return this.parseExpression()
+    const current = this.currentToken()
+
+    if (current.type === 'KEYWORD' && current.value === 'let') {
+      return this.parseLetStatement()
+    } else {
+      return this.parseExpression()
+    }
   }
 
-  parseExpression(): Expression {
+  private parseExpression(): Expression {
     const left = this.parseTerm()
 
     const operations = []
@@ -30,7 +36,7 @@ export class Parser {
     return new Expression(left, operations)
   }
 
-  parseTerm(): Term {
+  private parseTerm(): Term {
     const left = this.parseFactor()
 
     const operations = []
@@ -50,12 +56,15 @@ export class Parser {
     return new Term(left, operations)
   }
 
-  parseFactor(): Factor {
+  private parseFactor(): Factor {
     const current = this.currentToken()
 
     if (current.type === 'INTEGER') {
       this.currentIndex++
       return new Factor(current, null, null)
+    } else if (current.type === 'IDENTIFIER') {
+      this.currentIndex++
+      return new Factor(null, current, null)
     } else if (current.value === '(') {
       this.currentIndex++
       const expression = this.parseExpression()
@@ -68,6 +77,27 @@ export class Parser {
     } else {
       throw new Error(`Invalid token '${current}'.`)
     }
+  }
+
+  private parseLetStatement(): LetStatement {
+    const letToken = this.currentToken()
+    if (letToken.type !== 'KEYWORD' || letToken.value !== 'let') {
+      throw new Error(`'let' expected but got '${letToken}'`)
+    }
+    this.currentIndex++
+
+    const varName = this.currentToken()
+    this.currentIndex++
+
+    const equals = this.currentToken()
+    if (equals.type !== 'SYMBOL' || equals.value !== '=') {
+      throw new Error(`'=' expected but got ${equals}`)
+    }
+    this.currentIndex++
+
+    const expression = this.parseExpression()
+
+    return new LetStatement(varName, expression)
   }
 
   private currentToken(): Token {

@@ -23,4 +23,18 @@ describe('Parser', () => {
     const ast = parseInput(input)
     expect(ast.toString()).toEqual(expected)
   })
+
+  it('parse let a = 3', () => {
+    const input = 'let a = 3'
+    const expected = 'let a = 3'
+    const ast = parseInput(input)
+    expect(ast.toString()).toEqual(expected)
+  })
+
+  it('parse let hoge = (a + 2) * 2', () => {
+    const input = 'let hoge = (a + 2) * 2'
+    const expected = 'let hoge = ((a + 2) * 2)'
+    const ast = parseInput(input)
+    expect(ast.toString()).toEqual(expected)
+  })
 })

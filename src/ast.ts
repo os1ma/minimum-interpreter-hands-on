@@ -89,6 +89,8 @@ export class Factor {
   toString(): string {
     if (this._number) {
       return this.number!.toString()
+    } else if (this._varName) {
+      return this.varName!.toString()
     } else {
       return this._expression!.toString()
     }
