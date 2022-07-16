@@ -55,7 +55,7 @@ export class Parser {
 
     if (current.type === 'INTEGER') {
       this.currentIndex++
-      return new Factor(current, null)
+      return new Factor(current, null, null)
     } else if (current.value === '(') {
       this.currentIndex++
       const expression = this.parseExpression()
@@ -64,7 +64,7 @@ export class Parser {
         throw new Error(`Expected token is ')' but got ${this.currentToken()}.`)
       }
       this.currentIndex++
-      return new Factor(null, expression)
+      return new Factor(null, null, expression)
     } else {
       throw new Error(`Invalid token '${current}'.`)
     }

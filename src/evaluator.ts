@@ -1,7 +1,11 @@
 import { AST, Expression, Factor, Term } from './ast'
 
 export function evaluate(ast: AST): any {
-  return evaluateExpression(ast)
+  if (ast instanceof Expression) {
+    return evaluateExpression(ast)
+  } else {
+    throw new Error('Not implemented')
+  }
 }
 
 function evaluateExpression(expression: Expression): number {

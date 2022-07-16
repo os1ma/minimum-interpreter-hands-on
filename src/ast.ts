@@ -1,6 +1,8 @@
 import { Token } from './token'
 
-export type AST = Expression
+export type AST = Statement
+
+export type Statement = Expression | LetStatement
 
 type OperatorTermPair = {
   operator: Token
@@ -64,6 +66,7 @@ export class Term {
 export class Factor {
   constructor(
     private _number: Token | null,
+    private _varName: Token | null,
     private _expression: Expression | null
   ) {}
 
@@ -73,6 +76,10 @@ export class Factor {
 
   get number() {
     return this._number
+  }
+
+  get varName() {
+    return this._varName
   }
 
   get expression() {
@@ -85,5 +92,21 @@ export class Factor {
     } else {
       return this._expression!.toString()
     }
+  }
+}
+
+export class LetStatement {
+  constructor(private _varName: Token, private _expression: Expression) {}
+
+  get varName() {
+    return this._varName
+  }
+
+  get expression() {
+    return this._expression
+  }
+
+  toString(): string {
+    return `let ${this.varName} = ${this.expression}`
   }
 }
