@@ -74,6 +74,10 @@ export class Factor {
     return this._number !== null
   }
 
+  isVarName() {
+    return this._varName !== null
+  }
+
   get number() {
     return this._number
   }

@@ -14,6 +14,8 @@ function main() {
     input: process.stdin
   })
 
+  const env = {}
+
   showPrompt()
   reader.on('line', (line) => {
     const lexer = new Lexer(line)
@@ -25,8 +27,10 @@ function main() {
       console.log(ast.toString())
     }
 
-    const result = evaluate(ast)
-    console.log(result)
+    const result = evaluate(ast, env)
+    if (result) {
+      console.log(result)
+    }
 
     showPrompt()
   })
